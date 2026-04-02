@@ -66,6 +66,7 @@ function reiniciarScroll() {
     document.getElementById("productos6").scrollLeft = 0;
     document.getElementById("productos7").scrollLeft = 0;
     document.getElementById("productos8").scrollLeft = 0;
+    document.getElementById("productos9").scrollLeft = 0;
 }
 
 
@@ -254,7 +255,8 @@ const CATEGORIAS = [
     { id: "productos5", key: "categoria5" },
     { id: "productos6", key: "categoria6" },
     { id: "productos7", key: "categoria7" },
-    { id: "productos8", key: "categoria8" }
+    { id: "productos8", key: "categoria8" },
+    { id: "productos9", key: "categoria9" }
 ];
 
 function crearArticuloHTML(producto) {
