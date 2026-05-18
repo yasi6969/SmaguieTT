@@ -512,7 +512,6 @@ transition: padding 0.5s;
   }
   .header__menu-link {
     text-align: left;
-    align-items: flex-start;
     gap: 2px;
     justify-content: start;
     max-width: unset;

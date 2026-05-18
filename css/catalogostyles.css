@@ -600,9 +600,6 @@ background-color:#000;
     .producto {
         flex: 0 0 calc(50% - 12px);
     }
-    #filtro-precio, #filtro-categoria {
-        font-size: 9px;
-    }
 }
 
 
