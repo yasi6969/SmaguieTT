@@ -466,16 +466,57 @@ function cargarProductosRandoms(origen) {
     const productosRandom = generarProductosRandoms(origen);
     const contenedor = document.querySelector('.otros_productos .productos');
     contenedor.innerHTML = '';
+    
     productosRandom.forEach(producto => {
-        const div = document.createElement('a');
-        div.className = 'producto';
-        div.href = `/producto.html?id=${encodeURIComponent(producto.descripcion_corta)}`;
-        div.innerHTML = `
-            <img src="${producto.imagen}" alt="${producto.nombre}">
-            <h3>${producto.descripcion_corta}</h3>
-            <p>${producto.precio}</p>
+        const tieneDescuento = producto.descuento && producto.descuento > 0;
+        
+        const article = document.createElement('article');
+        article.className = 'producto';
+        article.setAttribute('data-id', producto.descripcion_corta);
+        
+        article.innerHTML = `
+            <div class="producto__imagen-contenedor producto-link" data-id="${producto.descripcion_corta}">
+                ${tieneDescuento ? `<span class="producto__descuento">-${producto.descuento}%</span>` : ""}
+                <img class="producto__imagen" src="${producto.imagen}" title="${producto.descripcion_corta}" alt="${producto.descripcion_corta}" loading="lazy">
+            </div>
+            <div class="producto__info">
+                <p class="producto__precio producto-link" data-id="${producto.descripcion_corta}">
+                    ${tieneDescuento 
+                        ? `<span class="precio-original" style="text-decoration: line-through; color: #999; ">${producto.precio}</span> <br>
+                           <span class="precio-descuento" style="color: #3ce746; font-weight: bold;">${calcularPrecioDescuento(producto.precio, producto.descuento)}</span>`
+                        : producto.precio
+                    }
+                </p>
+                <p class="producto__descripcion corta">
+                    <span class="texto-descripcion producto-link" data-id="${producto.descripcion_corta}">${producto.descripcion_corta}</span>
+                </p>
+                <button class="ver-mas-producto producto-link" data-id="${producto.descripcion_corta}">Ver más</button>
+            </div>
         `;
-        contenedor.appendChild(div);
+        
+        contenedor.appendChild(article);
     });
+    
+    // Agregar event listeners para los links
+    contenedor.querySelectorAll('.producto-link').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', () => {
+            const descripcion = el.dataset.id;
+            window.location.href = `producto.html?id=${encodeURIComponent(descripcion)}`;
+        });
+    });
+}
+
+// Función auxiliar para calcular precio con descuento
+function calcularPrecioDescuento(precioOriginal, descuento) {
+    const valorNumerico = parseFloat(precioOriginal.replace(/[^0-9]/g, ''));
+    const precioConDescuento = valorNumerico - (valorNumerico * descuento / 100);
+    const formatter = new Intl.NumberFormat('es-CL', {
+        style: 'currency',
+        currency: 'CLP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+    return formatter.format(precioConDescuento).replace('CLP', '').trim();
 }
 
